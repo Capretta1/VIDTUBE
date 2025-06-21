@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 
 dotenv.config({
-  path: "./src/.env", // Load environment variables from .env file
+  path: ".env", // Load environment variables from .env file
 });
 
 const connectDB = async () => {
