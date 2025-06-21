@@ -13,8 +13,7 @@ app.use(
 app.use(express.json({ limit: "16kb" })); // Set a limit for JSON payloads
 app.use(express.urlencoded({ extended: true, limit: "16kb" })); // Set a limit for URL-encoded payloads
 app.use(express.static("public")); // Serve static files from the "public" directory. Images or anything locally
-app.use(cookieParser()); // Middleware to parse cookies
-// Middleware to parse cookies, useful for handling authentication tokens or session IDs
+app.use(cookieParser()); // Middleware to parse cookies.Middleware to parse cookies, useful for handling authentication tokens or session IDs
 
 // import routes
 
