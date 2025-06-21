@@ -18,7 +18,9 @@ app.use(cookieParser()); // Middleware to parse cookies.Middleware to parse cook
 // import routes
 
 import healthcheckRoutes from "./routes/healthcheckRoutes.js"; // Import the health check routes
+import userRoutes from "./routes/userRoutes.js";
 //routes
 app.use("/healthcheck", healthcheckRoutes); // Use the health check routes
+app.use("/users", userRoutes);
 
 export { app };

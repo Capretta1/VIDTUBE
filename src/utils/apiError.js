@@ -12,11 +12,11 @@ class apiError extends Error {
     this.success = false; // Indicates that the operation was not successful
     this.errors = errors;
 
-    if (stack) {
-      this.stack = stack; // Additional error details, if any
-    } else {
-      Error.captureStackTrace(this, this.constructor);
-    }
+    // if (stack) {
+    //   this.stack = stack; // Additional error details, if any
+    // } else {
+    //   Error.captureStackTrace(this, this.constructor);
+    // }
   }
 }
 export { apiError }; // Export the apiError class for use in other modules
