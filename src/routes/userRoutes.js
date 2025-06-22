@@ -1,6 +1,7 @@
 import { Router } from "express";
-import { registerUser } from "../controllers/userController.js";
+import { registerUser, logoutUser } from "../controllers/userController.js";
 import { upload } from "../middlewares/multerMiddleWARE.js";
+import { verifyJwt } from "../middlewares/authMiddleware.js";
 
 const router = Router(); // Create a new Express router instance
 
@@ -17,6 +18,9 @@ router.route("/register").post(
   ]),
   registerUser,
 ); // Define a POST route for the register user at /register path
+
+//secured Routes
+router.route("/logout").post(verifyJwt, logoutUser);
 
 export default router;
 // This code defines a route for health check requests using Express.js.

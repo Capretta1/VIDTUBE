@@ -195,10 +195,30 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
 
 //
 const logoutUser = asyncHandler(async (req, res) => {
-  const findUser = await User
-    .findByIdAndUpdate
-    //TODO
-    ();
+  const findUser = await User.findByIdAndUpdate(
+    req.user._id,
+    {
+      $set: {
+        refreshToken: undefined,
+      },
+    },
+    {
+      new: true,
+    },
+  );
+  return res
+    .status(200)
+    .clearCookie("accessToken")
+    .clearCookie("refreshToken")
+    .json(
+      new apiResponse(
+        200,
+        {
+          message: "User logged out successfully",
+        },
+        "User logged out successfully",
+      ),
+    );
 });
 
-export { registerUser, loginUser, refreshAccessToken };
+export { registerUser, loginUser, refreshAccessToken, logoutUser };
