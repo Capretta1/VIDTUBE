@@ -3,6 +3,12 @@ import { apiResponse } from "../utils/apiResponse.js";
 import { apiError } from "../utils/apiError.js";
 import { User } from "../models/user.js";
 import uploadOnCloudinary from "../utils/cloudinary.js";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+
+dotenv.config({
+  path: ".env",
+});
 
 // Function to register a new user
 // This function handles user registration by validating input, checking for existing users, uploading images to Cloudinary, and creating a new user in the database.
@@ -149,4 +155,50 @@ const loginUser = asyncHandler(async (req, res) => {
       ),
     );
 });
-export { registerUser, loginUser };
+
+const refreshAccessToken = asyncHandler(async (req, res) => {
+  const incomingRefreshToken =
+    req.cookies.refreshToken || req.body.refreshToken;
+
+  if (!incomingRefreshToken) {
+    throw new apiError(404, "Refresh token not found");
+  }
+
+  try {
+    const decode = jwt.verify(incomingRefreshToken, process.env.REFRESH_SECRET);
+    const user = await User.findById(decode?._id);
+
+    if (!user) {
+      throw new apiError(404, "Invalid Refresh Token");
+    }
+    if (user.refreshToken !== incomingRefreshToken) {
+      throw new apiError(404, "Invalid Refresh Token");
+    }
+
+    const { accessToken, refreshToken: newRefreshToken } =
+      await generateAccessToken(user._id);
+    return res
+      .status(200)
+      .cookie("accessToken", accessToken, options)
+      .cookie("refreshToken", newRefreshToken, options)
+      .json(
+        new apiResponse(
+          200,
+          { newRefreshToken, accessToken },
+          "Access token refreshed successfully",
+        ),
+      );
+  } catch (error) {
+    throw new apiError(404, "Invalid Refresh Token");
+  }
+});
+
+//
+const logoutUser = asyncHandler(async (req, res) => {
+  const findUser = await User
+    .findByIdAndUpdate
+    //TODO
+    ();
+});
+
+export { registerUser, loginUser, refreshAccessToken };
